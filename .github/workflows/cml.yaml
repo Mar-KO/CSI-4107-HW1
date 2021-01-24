@@ -15,3 +15,12 @@ jobs:
           pip install -r requirements.txt
           python3 -m spacy download en_core_web_sm
           python3 homework1.py
+          
+          echo "### Model Metrics" > report.md
+          cat Twitter.txt >> report.md
+          
+          echo "### Data Viz" >> report.md
+          cml-publish feature_importance.png --md >> report.md
+          cml-publish residuals.png --md >> report.md
+          
+          cml-send-comment report.md
