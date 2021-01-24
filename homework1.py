@@ -1,4 +1,4 @@
-
+import spacy
 # The core spacy object that will be used for tokenization, lemmatization, POS Tagging, ...
 # Note that this is specifically for the English language and requires the English package to be installed
 # via pip to work as intended.
