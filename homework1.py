@@ -7,3 +7,7 @@ import pandas as pd
 # via pip to work as intended.
 
 sp = spacy.load("en_core_web_sm")
+
+#read the tweets
+df = pd.read_csv("Twitter.txt")
+df.head(10)
