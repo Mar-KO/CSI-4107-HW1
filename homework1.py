@@ -16,5 +16,7 @@ sp = spacy.load("en_core_web_sm")
 df = pd.read_csv("Twitter.txt", '\t', names=['querytweettime', 'title'])
 print(df.head(10))
 
+
+
           
 
