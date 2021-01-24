@@ -16,4 +16,5 @@ jobs:
           python3 -m spacy download en_core_web_sm
           python3 homework1.py
           
-          echo "### Model Metrics" 
+          echo "### Model Metrics"
+          cat tokenized.txt 
