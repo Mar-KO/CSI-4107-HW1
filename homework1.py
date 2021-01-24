@@ -17,7 +17,7 @@ sp = spacy.load("en_core_web_sm")
 df = pd.read_csv("Twitter.csv")
 df.head(10)
 
-doc = df["title"][1]
+doc = df["title"]
 doc_sp_1 = sp(doc)
 
 print("a)")
