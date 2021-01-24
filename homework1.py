@@ -25,8 +25,9 @@ print(doc)
 print("")
 my_file = open("tokenized.txt","w+")
 for token in doc:
-    print("\"" + token.lemma_)
-    my_file.write(token.lemma_)
+    print(token)
+    #print("\"" + token.lemma_)
+    #my_file.write(token.lemma_)
 print("")
 
 
