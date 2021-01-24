@@ -13,7 +13,7 @@ import numpy as np
 sp = spacy.load("en_core_web_sm")
 
 #read the tweets
-df = pd.read_fwf("Twitter.txt")
+df = pd.read_csv("Twitter.txt", '\s+')
 df.head(10)
 
           
