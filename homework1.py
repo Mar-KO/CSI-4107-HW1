@@ -21,6 +21,7 @@ doc = df["title"][1]
 doc_sp_1 = sp(doc)
 
 print("a)")
+print(doc)
 print("")
 my_file = open("tokenized.txt","w+")
 for token in doc_sp_1.ents:
