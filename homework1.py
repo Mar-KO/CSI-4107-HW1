@@ -23,12 +23,15 @@ print("a)")
 print(doc)
 print("")
 my_file = open("tokenized.txt","w+")
+i = 0
 for sentence in doc:
-    doc_sp_1 = sp(sentence)
-    print(sentence)
-    for token in doc_sp_1:
-        print("\"" + token.lemma_)
-        my_file.write(token.lemma_)
+    if i < 10:
+        doc_sp_1 = sp(sentence)
+        print(sentence)
+        for token in doc_sp_1:
+            print("\"" + token.lemma_)
+            my_file.write(token.lemma_)
+    i = i + 1
 print("")
 
 
