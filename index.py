@@ -1,5 +1,6 @@
 import spacy as sp
 import pandas
+import io
 
 
 
@@ -19,20 +20,27 @@ class InvertedIndex(object):
     
     # token is a string, document is the document ID
     def addToken(self, token, document):
-        if (self._hashtable.get(token) == None):
+        if (token not in self._hashtable.keys()):
             self._hashtable[token] = dict()
-            self._hashtable[token].update({document: 0})
-        else if (self._hashtable[token] != None and self._hashtable[token][document] != None):
-            self._hashtable[token][document] = 0
+            self._hashtable[token].update({str(document): 1})
+        elif (token in self._hashtable.keys()) and (str(document) not in self._hashtable[token].keys()):
+            self._hashtable[token].update({document: 1})
         else:
-            self._hashtable[token][document]++
+            self._hashtable[token][str(document)] = self._hashtable[token][str(document)] + 1
         
     
-    def tokenDf(self, token):
-        if (self._hashtable.get(token) == None):
+    def tokenTf(self, token):
+        if (token not in self._hashtable.keys()):
             return 0
         else:
             return len(self._hashtable[token])
+
+    def __str__(self):
+        final_str = io.StringIO()
+        for token in self._hashtable.keys():
+            final_str.write(f'{token}, {self.tokenTf(token)}: {self._hashtable[token]} \n')
+        return final_str.getvalue()
+
     
 
 # docs param is a DataFrame, inverted_index is a ref to InvertedIndex
