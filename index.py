@@ -40,6 +40,13 @@ class InvertedIndex(object):
         for token in self._hashtable.keys():
             final_str.write(f'{token}, {self.tokenTf(token)}: {self._hashtable[token]} \n')
         return final_str.getvalue()
+    
+    def dict():
+        return self._hashtable;
+
+    def documentCount():
+        return count(self._documents.keys())
+
 
     
 
