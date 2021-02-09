@@ -1,4 +1,5 @@
 import numpy as np
+from pandas import DataFrame
 
 
 
@@ -15,6 +16,16 @@ def indexWeighting(inv_index):
             idf_array.append(idf)
         return idf_array()
     
-    
+    def tfMatrix():
+        matrix = DataFrame()
+        indexDict = inv_index.dict()
+        for token, tokenDict in indexDict.items():
+            max = 0
+            for document, tf in tokenDict.items():
+                if tf > max:
+                    max = tf
+            for document, tf in tokenDict.items():
+                tf_ij = tf/max
+
     
             
