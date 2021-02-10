@@ -42,13 +42,13 @@ def tfMatrix(inv_index):
     matrixDict = dict()
     for token, tokenDict in indexDict.items():
         series = Series()
-        max = 0
+        maxTf = 0
         matrixDict.update({token: dict()})
         for document, tf in tokenDict.items():
-            if tf > max:
+            if tf > maxTf:
                 max = tf
         for document, tf in tokenDict.items():
-            tf_ij = tf/max
+            tf_ij = tf/maxTf
             matrixDict[token].update({document: tf_ij})
     matrix = DataFrame(matrixDict)
     return matrix.to_numpy()
