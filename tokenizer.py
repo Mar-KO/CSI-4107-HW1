@@ -43,35 +43,8 @@ def tokenize(*args, **kwrds):
 
 query_list = []
 #https://stackoverflow.com/questions/16922214/reading-a-text-file-and-splitting-it-into-single-words-in-python/16922328
-def queries():
-    with open('Queries.txt','r') as f:
-        
-        for line in f:
-            temp_list = []
-            i = 0
-            x = line.split() 
-            line_list = []    
-            for word in x:
-                
-                if(str(word) == "<num>"):
-                    #print(x[2])
-                    temp_list.append(x[2])
-                if (str(word) == "<querytweettime>"):
-                    #print(x[1])
-                    temp_list.append(x[1])
-                    y=0
-                if(str(word) == "<title>"):
-                    x.pop(0)
-                    x.pop(-1)
-                    length = len(x)
-                    #calculate rank for every word in title (for loop needed)
-            
-            if (len(temp_list) > 0):
-                query_list.append(temp_list)
-            if (i == 7):
-                temp_list = []
-            #increment i at every line. Reset Temp_List after 7 lines
-            i = i + 1    
+
+
 
         #[MB001, Q0, Tweettime, rank_for_word, score_for_word, tag]
 
@@ -79,15 +52,47 @@ class QueryData(object):
     
 
     def __init__(self):
-        self._hashtable = dict()
-        self._documents = dict()
+        self._query_list = []
+    
+    def queries(self):
+        with open('Queries.txt','r') as f:
+            i = 0
+            temp_list = []
+            for line in f:
 
+                x = line.split() 
+                #print(x)
+                if (i < 7):
+                    temp_list.append(x)
+                    i = i + 1
+                if (len(temp_list) > 6):
+                    cleaned = cleaning(temp_list)
+                    temp_list = []
+                    query_list.append(cleaned)
+                    i = -1
     # document will either be a Series or a DataFrame, 
     # using the tweettime as the key, and the Doc as the value
-    def addDocument(self, document):
-        self._documents[document['querytweettime']] = document['doc']
+    def cleaning(self, array):
+        temp_list = []
+        copy = array
+        for line in copy: 
+            for word in line:
+                if(str(word) == "<num>"):
+                    #print(x[2])
+                    temp_list.append(line[2])
+                if (str(word) == "<querytweettime>"):
+                    #print(x[1])
+                    temp_list.append(line[1])
+                    y=0
+                if(str(word) == "<title>"):
+                    line.pop(0)
+                    line.pop(-1)
+                    temp_list.append(line)
+                    length = len(line)
+        return temp_list
           
  
 
 queries()
-print(query_list)
+print(query_list[1])
+print(query_list[17])
