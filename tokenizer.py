@@ -46,11 +46,10 @@ query_list = []
 
 
 
-        #[MB001, Q0, Tweettime, rank_for_word, score_for_word, tag]
+#[MB001, Q0, Tweettime, rank_for_word, score_for_word, tag]
 
 class QueryData(object):
     
-
     def __init__(self):
         self._query_list = []
     
@@ -68,10 +67,10 @@ class QueryData(object):
                 if (len(temp_list) > 6):
                     cleaned = cleaning(temp_list)
                     temp_list = []
-                    query_list.append(cleaned)
+                    self.query_list.append(cleaned)
                     i = -1
-    # document will either be a Series or a DataFrame, 
-    # using the tweettime as the key, and the Doc as the value
+  
+    # creates an array for every tweet
     def cleaning(self, array):
         temp_list = []
         copy = array
@@ -93,6 +92,6 @@ class QueryData(object):
           
  
 
-queries()
+
 print(query_list[1])
 print(query_list[17])
