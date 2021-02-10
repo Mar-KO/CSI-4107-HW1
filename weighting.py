@@ -34,21 +34,23 @@ def indexWeighting(inv_index):
         return matrix.to_numpy()
     return
 
-    def tfMatrix(invIndex):
-        matrix = DataFrame()
-        indexDict = inv_index.dict()
-        matrixDict = dict()
-        for token, tokenDict in indexDict.items():
-            series = Series()
-            max = 0
-            matrixDict.update({token: dict()})
-            for document, tf in tokenDict.items():
-                if tf > max:
-                    max = tf
-            for document, tf in tokenDict.items():
-                tf_ij = tf/max
-                matrixDict[token].update({document: tf_ij})
-        matrix = DataFrame(matrixDict)
-        return matrix.to_numpy()
-    
+
+# Warning: This algorithm is trash, and will possible freeze your computer
+def tfMatrix(inv_index):
+    matrix = DataFrame()
+    indexDict = inv_index.dict()
+    matrixDict = dict()
+    for token, tokenDict in indexDict.items():
+        series = Series()
+        max = 0
+        matrixDict.update({token: dict()})
+        for document, tf in tokenDict.items():
+            if tf > max:
+                max = tf
+        for document, tf in tokenDict.items():
+            tf_ij = tf/max
+            matrixDict[token].update({document: tf_ij})
+    matrix = DataFrame(matrixDict)
+    return matrix.to_numpy()
+
             
