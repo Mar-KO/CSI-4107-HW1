@@ -13,7 +13,7 @@ import numpy as np
 
 
 # %%
-sp = spacy.load("en_core_web_lg")
+sp = spacy.load("en_core_web_sm")
 
 #read the tweets
 df = pd.read_csv("Twitter.txt", '\t', names=['querytweettime', 'title'])
