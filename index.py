@@ -21,10 +21,10 @@ class InvertedIndex(object):
     # token is a string, document is the document ID
     def addToken(self, token, document):
         if (token not in self._hashtable.keys()):
-            self._hashtable[token] = dict()
+            self._hashtable.update({token:dict()})
             self._hashtable[token].update({str(document): 1})
         elif (token in self._hashtable.keys()) and (str(document) not in self._hashtable[token].keys()):
-            self._hashtable[token].update({document: 1})
+            self._hashtable[token].update({str(document): 1})
         else:
             self._hashtable[token][str(document)] = self._hashtable[token][str(document)] + 1
         
@@ -46,6 +46,8 @@ class InvertedIndex(object):
 
     def documentCount(self):
         return len(self._documents.keys())
+    
+    
 
 
     
@@ -54,6 +56,6 @@ class InvertedIndex(object):
 def indexDocs(docs, inverted_index):
     doc = docs['doc']
     docId = docs['querytweettime']
+    inverted_index.addDocument(docs)
     for token in doc:
-        inverted_index.addDocument(docs)
         inverted_index.addToken(token.text, docId)

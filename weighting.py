@@ -1,56 +1,55 @@
 import numpy as np
+import pandas
 from pandas import DataFrame, Series
-
+import threading
+import multiprocessing
 
 
 # inv_index is an InvertedIndex
 def indexWeighting(inv_index):
 
     # returns a 
-    def invDocFreq():
-        n = len(inv_index.dict().keys())
-        idf_array = list()
-        for token in inv_index.dict().keys():
-            df = inv_index.tokenTf(token)
-            idf = np.log2(n/df)
-            idf_array.append(idf)
-        return idf_array
     
-    def tfMatrix():
-        matrix = DataFrame()
-        indexDict = inv_index.dict()
-        matrixDict = dict()
-        for token, tokenDict in indexDict.items():
-            series = Series()
-            max = 0
-            matrixDict.update({token: dict()})
-            for document, tf in tokenDict.items():
-                if tf > max:
-                    max = tf
-            for document, tf in tokenDict.items():
-                tf_ij = tf/max
-                matrixDict[token].update({document: tf_ij})
-        matrix = DataFrame(matrixDict)
-        return matrix.to_numpy()
-    return
-
-
-# Warning: This algorithm is trash, and will possible freeze your computer
-def tfMatrix(inv_index):
-    matrix = DataFrame()
+    
     indexDict = inv_index.dict()
-    matrixDict = dict()
+    tf_idf = dict()
+    idfDict = invDocFreq(inv_index)
     for token, tokenDict in indexDict.items():
-        series = Series()
         maxTf = 0
-        matrixDict.update({token: dict()})
         for document, tf in tokenDict.items():
             if tf > maxTf:
-                max = tf
+                maxTf = tf
         for document, tf in tokenDict.items():
             tf_ij = tf/maxTf
-            matrixDict[token].update({document: tf_ij})
-    matrix = DataFrame(matrixDict)
-    return matrix.to_numpy()
+            w_ij = tf_ij * idfDict[token]
+            tf_idf[document, token] = w_ij
+        
+        
+    return tf_idf
+
+def invDocFreq(inv_index):
+    n = len(inv_index.dict().keys())
+    idf_array = dict()
+    for token in inv_index.dict().keys():
+        df = inv_index.tokenTf(token)
+        idf = np.log2(n/df)
+        idf_array.update({token: idf})
+    return idf_array
+
+
+# query is a string
+def queryWeighting(query, inv_index, spacy):
+    idfDict = invDocFreq(inv_index)
+    weightArray = dict()
+    tokens = spacy.tokenizer(query)
+    for token in tokens:
+        if (token in idfDict.keys()):
+            w_iq = idfDict[token] * (0.5 + 0.5)
+            weightArray.update({token: w_iq})
+    return weightArray
+
+def vectorizeWeighting(tf_idf):
+    idx = pandas.MultiIndex.from_tuples(tf_idf.keys())
+    return Series(tf_idf.values(), index=idx).unstack(2, fill_value=0.0)   
 
             
