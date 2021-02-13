@@ -30,11 +30,12 @@ def Remove_Punctuations(sentence):
 def tokenize(*args, **kwrds):
     df = args[0]
     spacy = kwrds['spacy']
-    x = Remove_Punctuations(str(df["title"]))
-    doc = spacy.tokenizer(x)
+    # x = Remove_Punctuations(str(df["title"]))
+    x = str(df['title'])
+    doc = spacy(x)
     new_token_list = list()
     for token in doc:
-        if (Is_StopWord(token.text) == False) and (Is_Number(token.text) == False):
-            new_token_list.append(token.text)
+        if (token.is_stop == False) and (token.like_num == False) and (token.is_punct == False) and (token.like_url == False):
+            new_token_list.append(token.lemma_)
     new_doc = Doc(doc.vocab, new_token_list)
     return pd.Series({'querytweettime': df["querytweettime"], 'doc': new_doc})

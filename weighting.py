@@ -50,6 +50,6 @@ def queryWeighting(query, inv_index, spacy):
 
 def vectorizeWeighting(tf_idf):
     idx = pandas.MultiIndex.from_tuples(tf_idf.keys())
-    return Series(tf_idf.values(), index=idx).unstack(2, fill_value=0.0)   
+    return Series(tf_idf.values(), index=idx).unstack(fill_value=0.0)   
 
             
