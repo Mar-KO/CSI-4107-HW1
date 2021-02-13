@@ -22,7 +22,7 @@ def indexWeighting(inv_index):
         for document, tf in tokenDict.items():
             tf_ij = tf/maxTf
             w_ij = tf_ij * idfDict[token]
-            tf_idf[document, token] = w_ij
+            tf_idf[document, token] = np.int32(w_ij)
         
         
     return tf_idf

@@ -35,7 +35,7 @@ def tokenize(*args, **kwrds):
     doc = spacy(x)
     new_token_list = list()
     for token in doc:
-        if (token.is_stop == False) and (token.like_num == False) and (token.is_punct == False) and (token.like_url == False):
+        if not(token.is_stop == True or token.like_num == True or token.is_punct == True or token.like_url == True):
             new_token_list.append(token.lemma_)
     new_doc = Doc(doc.vocab, new_token_list)
     return pd.Series({'querytweettime': df["querytweettime"], 'doc': new_doc})
