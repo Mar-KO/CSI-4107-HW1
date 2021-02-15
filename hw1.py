@@ -51,7 +51,8 @@ invIndex = InvertedIndex()
 for label, data in docs_tokenized.iterrows():
     indexDocs(data, invIndex)
 
-print(invIndex)
+print(list(invIndex.dict().keys())[:100])
+
 
 
 # %%
@@ -70,10 +71,11 @@ print(weights)
 import ranking
 import queryutils
 
+dvl = weighting.computeDocumentVectorLengths(docs_tokenized, weights)
 queryData = queryutils.importQueries()
 results = io.open('Results.txt', 'w')
 for query in queryData:
-    similarityRankings = ranking.queryRanking(query.text, weights, invIndex, sp)
+    similarityRankings = ranking.queryRanking(query.text, weights, invIndex, sp, dvl)
     series = pd.Series(similarityRankings).sort_values(ascending=False).head(1000)
     count = 0
     for doc, value in series.iteritems():
