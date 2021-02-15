@@ -67,8 +67,20 @@ print(weights)
 
 
 # %%
-weights_vectorized = weighting.vectorizeWeighting(weights)
-print(weights_vectorized)
+import ranking
+import queryutils
+
+queryData = queryutils.importQueries()
+results = io.open('Results.txt', 'w')
+for query in queryData:
+    similarityRankings = ranking.queryRanking(query.text, weights, invIndex, sp)
+    series = pd.Series(similarityRankings).sort_values(ascending=False).head(1000)
+    count = 0
+    for doc, value in series.iteritems():
+        count = count + 1
+        results.write(f'{query.num} Q0 {doc} {count} {value} run1\n')
+results.close()
+
 
 
 # %%

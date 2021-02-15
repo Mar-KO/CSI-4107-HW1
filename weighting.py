@@ -22,7 +22,7 @@ def indexWeighting(inv_index):
         for document, tf in tokenDict.items():
             tf_ij = tf/maxTf
             w_ij = tf_ij * idfDict[token]
-            tf_idf[document, token] = np.int32(w_ij)
+            tf_idf[document, token] = np.float32(w_ij)
         
         
     return tf_idf
@@ -41,15 +41,31 @@ def invDocFreq(inv_index):
 def queryWeighting(query, inv_index, spacy):
     idfDict = invDocFreq(inv_index)
     weightArray = dict()
-    tokens = spacy.tokenizer(query)
+    tokens = spacy(query)
+    tokenCount = {}
     for token in tokens:
-        if (token in idfDict.keys()):
-            w_iq = idfDict[token] * (0.5 + 0.5)
-            weightArray.update({token: w_iq})
+        if (token.lemma_ not in tokenCount.keys()):
+            tokenCount.update({token.lemma_: 1})
+        tokenCount[token.lemma_] = tokenCount[token.lemma_] + 1
+    for token in tokens:
+        if (token.lemma_ in idfDict.keys()):
+            w_iq = idfDict[token.lemma_] * (0.5 + 0.5 * tokenCount[token.lemma_])
+            weightArray.update({token.lemma_: w_iq})
     return weightArray
 
-def vectorizeWeighting(tf_idf):
-    idx = pandas.MultiIndex.from_tuples(tf_idf.keys())
-    return Series(tf_idf.values(), index=idx).unstack(fill_value=0.0)   
+# docCollection is a DataFrame, tf_idf is the weights dictionary
+def computeDocumentVectorLengths(docCollection, tf_idf):
+    documentVectorLengths = {}
+    for label, data in docCollection.iterrows():
+        doc = data['doc']
+        docId = data['querytweettime']
+        weightsSum = 0.0
+        for token in doc:
+            weightsSum = weightsSum + np.exp(tf_idf[docId, token.text])
+        documentVectorLengths[docId] = np.sqrt(weightsSum)
+    return documentVectorLengths
+
+
+
 
             
