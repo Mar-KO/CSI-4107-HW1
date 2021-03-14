@@ -8,7 +8,7 @@
 from IPython import get_ipython
 
 # %% [markdown]
-# # Assignment 1
+# # Assignment 2
 
 # %%
 import spacy
