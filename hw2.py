@@ -17,7 +17,7 @@ import numpy as np
 
 
 # %%
-sp = spacy.load("en_trf_bertbaseuncased_lg")
+sp = spacy.load("en_core_web_sm")
 
 #read the tweets
 df = pd.read_csv("Twitter.txt", '\t', names=['querytweettime', 'title'])
@@ -32,7 +32,7 @@ import pickle
     
 docs_mini = df.head(20)
 
-
+## Open documents
 try:
     with open('tokenizedDataFrame.bin', 'rb+') as pickle_file:
         docs_tokenized = pickle.load(pickle_file)
@@ -61,6 +61,7 @@ print(len(a.keys()))
 
 
 # %%
+## TF-IDF
 import weighting
 weights = weighting.indexWeighting(invIndex)
 print(weights)
@@ -70,6 +71,8 @@ print(weights)
 # %%
 import ranking
 import queryutils
+
+## Query and ranking using CosSim
 
 dvl = weighting.computeDocumentVectorLengths(docs_tokenized, weights)
 queryData = queryutils.importQueries()
@@ -87,5 +90,6 @@ results.close()
 
 # %%
 
+## start using BERT
 
-
+sp = spacy.load("en_trf_")
