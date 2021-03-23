@@ -77,10 +77,20 @@ import queryutils
 dvl = weighting.computeDocumentVectorLengths(docs_tokenized, weights)
 queryData = queryutils.importQueries()
 results = io.open('Results.txt', 'w')
+
+from pygaggle.rerank.base import Query, Text
+from pygaggle.rerank.transformer import MonoBERT
+
+reranker =  MonoBERT()
+
 for query in queryData:
     similarityRankings = ranking.queryRanking(query.text, weights, invIndex, sp, dvl)
     series = pd.Series(similarityRankings).sort_values(ascending=False).head(1000)
+    texts = [ Text(df.at[doc, 'querytweettime'], {'docid': doc}, 0) for doc, value in series.iteritems()]
     count = 0
+    queryObject = Query(query.text)
+    reranked = reranker.rerank(queryObject, texts)
+    reranked.sort(key=lambda x: x.score, reverse=True)
     for doc, value in series.iteritems():
         count = count + 1
         results.write(f'{query.num} Q0 {doc} {count} {value} run1\n')
