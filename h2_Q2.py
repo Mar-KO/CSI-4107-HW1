@@ -4,6 +4,8 @@ import sys
 import random
 import numpy as np
 from typing import List, Tuple, Dict
+import search_engine as engine
+from search_engine import Article
 from collections import Counter
 from nltk.corpus import wordnet, stopwords
 import nltk
@@ -12,7 +14,7 @@ nltk.download('stopwords')
 
 stop_words = stopwords.words('english')
 
-
+#help from https://github.com/DrompiX/ir_hw2/blob/master/query_exp.py
 def read_data(path: str):
     """
     Helper function, parses Cranfield data. Used for tests. Use it to evaluate your own search engine
