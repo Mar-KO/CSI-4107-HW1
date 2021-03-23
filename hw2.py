@@ -101,5 +101,3 @@ results.close()
 # %%
 
 ## start using BERT
-
-sp = spacy.load("en_trf_")
