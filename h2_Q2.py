@@ -5,7 +5,6 @@ import random
 import numpy as np
 from typing import List, Tuple, Dict
 import search_engine as engine
-from search_engine import Article
 from collections import Counter
 from nltk.corpus import wordnet, stopwords
 import nltk
