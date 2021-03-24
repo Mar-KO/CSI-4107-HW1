@@ -95,8 +95,8 @@ for query in queryData:
         count = count + 1
         results.write(f'{query.num} Q0 {doc} {count} {value} run1\n')
     count = 1
-    for doc, value in series.iteritems() :
-        results.write(f'{query.num} Q0 {doc} {count} {reranked[count - 1].score} run2\n')
+    for text in reranked:
+        results.write(f'{query.num} Q0 {text.metadata['docid']} {count} {text.score} run2\n')
         count = count + 1
 results.close()
 
