@@ -5,6 +5,7 @@ import random
 import numpy as np
 from typing import List, Tuple, Dict
 import search_engine as engine
+import pandas as pd
 from collections import Counter
 from nltk.corpus import wordnet, stopwords
 import nltk
@@ -12,7 +13,8 @@ nltk.download('wordnet')
 nltk.download('stopwords')
 
 stop_words = stopwords.words('english')
-
+df = pd.read_csv("Twitter.csv")
+doc = df["title"]
 #help from https://github.com/DrompiX/ir_hw2/blob/master/query_exp.py
 def read_data(path: str):
     """
@@ -24,10 +26,9 @@ def read_data(path: str):
     documents = {}
     queries = {}
     relevance = {}
-    for doc in json.load(open(path + 'cranfield_data.json')):
-        title = re.sub(r'\s+', ' ', doc['title'])
-        body = re.sub(r'\s+', ' ', doc['body'][len(doc['title']):])
-        documents[doc['id']] = Article(title=title, body=body)
+    for sentence in doc:
+        title = re.sub(r'\s+', ' ', sentence['title'])
+        documents[sentence['querytweettime']] = df(title=title)
     
     for query in json.load(open(path + 'cran.qry.json')):
         queries[query['query number']] = query['query']
@@ -147,8 +148,7 @@ def mean_avg_precision(top_k_results, relevance):
     
     return map_score
 
-
-def docs2vecs(docs: Dict[int, Article]):
+def docs2vecs(docs: Dict[int, doc]):
     '''Converts documents to vector representation
     
     Args:
@@ -175,7 +175,7 @@ def docs2vecs(docs: Dict[int, Article]):
 
 
 def rocchio(query: str, relevance: List[Tuple[int, int]],
-            top_docs: Dict[int, Article], alph=1.0, beta=0.75, gamma=0.15):
+            top_docs: Dict[int, doc], alph=1.0, beta=0.75, gamma=0.15):
     '''Implementation of Rocchio algorithm
     Args:
         query: input query
@@ -242,7 +242,7 @@ def rocchio(query: str, relevance: List[Tuple[int, int]],
     return new_query
 
 
-def get_k_relevant_docs(docs: Dict[int, Article], k: int):
+def get_k_relevant_docs(docs: Dict[int, doc], k: int):
     ''' Returns relevance for top k relevant docs
     Args:
         docs: considered docs
@@ -262,7 +262,7 @@ def get_k_relevant_docs(docs: Dict[int, Article], k: int):
     return relevance
 
 
-def pseudo_relevance_feedback(query: str, top_docs: Dict[int, Article],
+def pseudo_relevance_feedback(query: str, top_docs: Dict[int,doc],
                               relevant_n=5, alph=1.0, beta=0.75, gamma=0):
     '''Implementation of pseudo relevance feedback
     
@@ -371,7 +371,7 @@ def global_wordnet_exp(query: str, relevant_docs, add_terms: int=3):
     return ''.join(new_query)
 
 
-def k_relevant(docs: Dict[int, Article], k: int):
+def k_relevant(docs: Dict[int, doc], k: int):
     '''Returns first k documents
     
     Args:
@@ -388,7 +388,7 @@ def k_relevant(docs: Dict[int, Article], k: int):
     return relevant
 
 
-def train_test_split(docs: Dict[int, Article]):
+def train_test_split(docs: Dict[int, doc]):
     '''Splits input docs on train and test parts 50:50
     
     Args:
