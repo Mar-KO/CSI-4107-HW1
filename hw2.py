@@ -86,7 +86,7 @@ reranker =  MonoBERT()
 for query in queryData:
     similarityRankings = ranking.queryRanking(query.text, weights, invIndex, sp, dvl)
     series = pd.Series(similarityRankings).sort_values(ascending=False).head(1000)
-    texts = [ Text(df.loc[df.querytweettime.isin([doc]), 'title'].tolist()[0], {'docid': doc}, 0) for doc, value in series.iteritems()]
+    texts = [ Text(df.query(f'querytweettime=={doc}')["title"].iloc[0], {'docid': doc}, 0) for doc, value in series.iteritems()]
     count = 0
     queryObject = Query(query.text)
     reranked = reranker.rerank(queryObject, texts)
@@ -96,7 +96,7 @@ for query in queryData:
         results.write(f'{query.num} Q0 {doc} {count} {value} run1\n')
     count = 1
     for text in reranked:
-        results.write(f'{query.num} Q0 {text.metadata['docid']} {count} {text.score} run2\n')
+        results.write(f'{query.num} Q0 {text.metadata["docid"]} {count} {text.score} run2\n')
         count = count + 1
 results.close()
 
