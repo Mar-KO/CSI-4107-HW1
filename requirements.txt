@@ -1,5 +1,7 @@
+pygaggle
+transformers
+pytorch
 pandas
 spacy
 numpy
-tensorflow
-spacy-transformers
+
