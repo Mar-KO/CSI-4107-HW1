@@ -1,7 +1,8 @@
-pygaggle
 transformers
 pytorch
 pandas
 spacy
 numpy
+pygaggle
+gensim
 

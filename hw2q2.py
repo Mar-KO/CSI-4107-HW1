@@ -80,11 +80,17 @@ from gensim.models import Word2Vec
 dvl = weighting.computeDocumentVectorLengths(docs_tokenized, weights)
 queryData = queryutils.importQueries()
 results = io.open('Results.txt', 'w')
-model = Word2Vec(df["title"].tolist())
+sentences = list()
+for doc, text in docs_tokenized["doc"].iteritems():
+    sentences.append([t.text for t in text])
+model = Word2Vec(sentences, min_count=2)
+
+
+
 
 for query in queryData:
     print(f'Adding synonyms for query {query.num}...')
-    newQuery = ranking.addSynonyms(query.text, model, df)
+    newQuery = ranking.addSynonyms(query.text, model, df, sp)
     print(f'Ranking query {query.num}...')
     similarityRankings = ranking.queryRanking(newQuery, weights, invIndex, sp, dvl)
     series = pd.Series(similarityRankings).sort_values(ascending=False).head(1000)
