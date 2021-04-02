@@ -14,6 +14,7 @@ from IPython import get_ipython
 import spacy
 import pandas as pd 
 import numpy as np
+import textwrap
 
 
 # %%
@@ -64,7 +65,7 @@ print(len(a.keys()))
 ## TF-IDF
 import weighting
 weights = weighting.indexWeighting(invIndex)
-print(weights)
+print(textwrap.shorten(str(weights), width=50))
 
 
 
@@ -84,13 +85,16 @@ from pygaggle.rerank.transformer import MonoBERT
 reranker =  MonoBERT()
 
 for query in queryData:
+    print(f'Ranking query {query.num}...')
     similarityRankings = ranking.queryRanking(query.text, weights, invIndex, sp, dvl)
     series = pd.Series(similarityRankings).sort_values(ascending=False).head(1000)
     texts = [ Text(df.query(f'querytweettime=={doc}')["title"].iloc[0], {'docid': doc}, 0) for doc, value in series.iteritems()]
     count = 0
     queryObject = Query(query.text)
+    print(f'Reranking query {query.num}...')
     reranked = reranker.rerank(queryObject, texts)
     reranked.sort(key=lambda x: x.score, reverse=True)
+    print(f'Outputting to results.txt for query {query.num}')
     for doc, value in series.iteritems():
         count = count + 1
         results.write(f'{query.num} Q0 {doc} {count} {value} run1\n')
