@@ -2,6 +2,9 @@ import pandas as pd
 import numpy as np
 import weighting
 from tokenizer import QueryData
+import gensim
+from gensim.models import Word2Vec
+import itertools
 
 
 def queryRankingCosSim(query, tfidf, inv_index, spacy, dvl):
@@ -31,3 +34,15 @@ def queryRanking(query, tfidf, inv_index, spacy, dvl):
             similarity = w_iq * tfidf[document, token]
             similarityDict[document] = similarityDict[document] + similarity
     return similarityDict
+
+def addSynonyms(query, model, dataset):
+    wordlist = query.split()
+    newQuery = query
+    for word1, word2 in itertools.combinations(wordlist, 2):
+        if (word1 != word2):
+            sim = model.wv.similarity(word1, word2)
+            if (sim >= 0.9):
+                syn = model.wv.most_similar(positive=[word1,word2])[0][0]
+                if (syn not in newQuery):
+                    newQuery.append(f' {syn}')
+    return newQuery
