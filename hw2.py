@@ -95,9 +95,9 @@ for query in queryData:
     reranked = reranker.rerank(queryObject, texts)
     reranked.sort(key=lambda x: x.score, reverse=True)
     print(f'Outputting to results.txt for query {query.num}')
-    for doc, value in series.iteritems():
-        count = count + 1
-        results.write(f'{query.num} Q0 {doc} {count} {value} run1\n')
+    #for doc, value in series.iteritems():
+     #   count = count + 1
+      #  results.write(f'{query.num} Q0 {doc} {count} {value} run1\n')
     count = 1
     for text in reranked:
         results.write(f'{query.num} Q0 {text.metadata["docid"]} {count} {text.score} run2\n')
